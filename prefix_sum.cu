@@ -39,7 +39,7 @@
 // scan.cuh
 void sequential_scan(int* output, int* input, int length);
 void blockscan(int *output, int *input, int length, bool bcao);
-void scan(int *output, int *input, int length, bool bcao);
+void scan(int *output, int *input, int length, int device, bool bcao);
 
 void scanLargeDeviceArray(int *output, int *input, int length, bool bcao);
 void scanSmallDeviceArray(int *d_out, int *d_in, int length, bool bcao);
@@ -80,6 +80,7 @@ void PrefixSumCUDA(
     grid_off.contiguous().data_ptr<int>(),
     grid_cnt.contiguous().data_ptr<int>(),
     num_grids,
+    grid_cnt.device().index(),
     true
   );
 
@@ -132,7 +133,8 @@ void blockscan(int *d_out, int *d_in, int length, bool bcao) {
   return;
 }
 
-void scan(int *d_out, int *d_in, int length, bool bcao) {
+void scan(int *d_out, int *d_in, int length, int device, bool bcao) {
+    cudaSetDevice(device);
 	if (length > ELEMENTS_PER_BLOCK) {
 		scanLargeDeviceArray(d_out, d_in, length, bcao);
 	}

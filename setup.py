@@ -5,7 +5,7 @@ from torch.utils.cpp_extension import CUDA_HOME, CppExtension, CUDAExtension
 
 class BuildExtension(torch.utils.cpp_extension.BuildExtension):
     def __init__(self, *args, **kwargs):
-        super().__init__(use_ninja=False, *args, **kwargs)
+        super().__init__(use_ninja=True, *args, **kwargs)
 
 nvcc_args = []
 nvcc_flags_env = os.getenv("NVCC_FLAGS", "")
